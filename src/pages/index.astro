@@ -50,7 +50,7 @@ const descs: Record<string, string> = {
   path=""
   variant="film"
 >
-  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} layout={film.layout} ground={film.ground} loader={site.brand.join(" ")}>
+  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} layout={film.layout} ground={film.ground} items=".beat-index, .beat-heading, .beat-body, .stats-hero, .stat, .stats-ctas, .callouts" loader={site.brand.join(" ")}>
     <section class="band-section hero-section is-active" id="top" data-seg="hero:0,hero:1" data-animation="hero">
       <div class="hero-inner">
         <span class="eyebrow">Windsor's independent parts counter</span>
@@ -83,7 +83,7 @@ const descs: Record<string, string> = {
       </div>
     </section>
     {/* Category callouts on the exploded hold: thin leader lines, mono labels, over the film card */}
-    <section class="band-section callout-section" data-seg="explode:0.88,oilf:0.15" aria-hidden="true">
+    <section class="band-section callout-section" data-seg="explode:0.97,holdx:1" data-animation="fade-up" aria-hidden="true">
       <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
         {exploded.map((k) => (
           <g class="lbl">
@@ -102,7 +102,7 @@ const descs: Record<string, string> = {
         <p class="beat-body">Synthetic, blend or conventional, with the filter to match. Not sure which? Ask the counter.</p>
       </div>
     </section>
-    <section class="band-section callout-section" data-seg="oilf:0.92,oilr:0.25" aria-hidden="true">
+    <section class="band-section callout-section" data-seg="oilf:0.97,oilh:1" data-animation="fade-up" aria-hidden="true">
       <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
         {oil.map((k) => (
           <g class="lbl">
@@ -121,7 +121,7 @@ const descs: Record<string, string> = {
         <p class="beat-body">Vinyl, headliner, foam and auto carpet by the yard, for cars, boats, booths and basements.</p>
       </div>
     </section>
-    <section class="band-section callout-section" data-seg="cabf:0.92,cabr:0.25" aria-hidden="true">
+    <section class="band-section callout-section" data-seg="cabf:0.97,cabh:1" data-animation="fade-up" aria-hidden="true">
       <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
         {cabin.map((k) => (
           <g class="lbl">
