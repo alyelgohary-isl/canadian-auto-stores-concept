@@ -1,15 +1,15 @@
 /* "Every part. Since 1938." The home film, passed to <ScrollFilm> in src/pages/index.astro.
-   Six Kling clips split to 61 frames each (tools/frames.sh, 960px, 12 fps) = 366 frames.
+   Six Kling clips split to 61 frames each = 366 frames. pull/draw/wax are 16:9 (1280x720) for the full-bleed layout; explode/oil/cabin are square (960) and float on the navy ground.
    Returns and the rebuild are the same frames played backwards in the timeline; no extra files.
    Provenance: every frame derives from work/stills/S1_master_photo_v2.png (generated) via edit-mode stills. */
 
 export const sources = {
-  pull:    { dir: "frames/pull",    prefix: "pb_", count: 61 },   // C1: pull-back clip stored REVERSED on disk: frame 0 = wide shop, frame 60 = the master
-  draw:    { dir: "frames/draw",    prefix: "dr_", count: 61 },   // C2: photo → blueprint, front-to-back wipe
+  pull:    { dir: "frames/pull",    prefix: "pb_", count: 61 },   // W1 16:9: pull-back stored REVERSED on disk: frame 0 = wide shop, frame 60 = the master
+  draw:    { dir: "frames/draw",    prefix: "dr_", count: 61 },   // W2 16:9: photo → blueprint, left-to-right wipe
   explode: { dir: "frames/explode", prefix: "ex_", count: 61 },   // C3: blueprint → exploded view
   oil:     { dir: "frames/oil",     prefix: "oi_", count: 61 },   // C4: filter + drain plug + one amber stream
   cabin:   { dir: "frames/cabin",   prefix: "cb_", count: 61 },   // C5: seats lift out, fill red
-  wax:     { dir: "frames/wax",     prefix: "wx_", count: 61 },   // C6: one specular sweep on the photoreal car
+  wax:     { dir: "frames/wax",     prefix: "wx_", count: 61 },   // W6 16:9: one specular sweep on the photoreal car
 };
 
 type Ref = [keyof typeof sources, number];
@@ -40,3 +40,8 @@ export const preload: Ref = ["draw", 0];   // = the first 61 frames (all of "pul
 /* Dark wash under the stats moment; back to 0 before the film ends so the footer reads at full contrast */
 export const overlay = { enter: "pullout:0.15", leave: "end:0.2", max: 0.86, color: "#070d18" };
 export const marquee: { text: string; enter: string; leave: string } | undefined = undefined;
+
+/* Full-bleed layout: the film fills the viewport; square frames float on this ground (the mean navy of the
+   blueprint stills' edges) with feathered sides, so the drawing has no visible frame. */
+export const layout = "bleed" as const;
+export const ground = "#0d1a2c";

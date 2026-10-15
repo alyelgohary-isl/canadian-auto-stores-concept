@@ -23,8 +23,8 @@ const oil: Callout[] = [
   { a: [0.343, 0.80], l: [0.18, 0.90], text: "Motor oil", side: "end" },
 ];
 const cabin: Callout[] = [
-  { a: [0.47, 0.17], l: [0.26, 0.10], text: "Seat vinyl & foam", side: "end", accent: true },
-  { a: [0.60, 0.12], l: [0.76, 0.06], text: "Headliner", side: "start", accent: true },
+  { a: [0.47, 0.17], l: [0.28, 0.24], text: "Seat vinyl & foam", side: "end", accent: true },
+  { a: [0.60, 0.12], l: [0.78, 0.17], text: "Headliner", side: "start", accent: true },
 ];
 const cards = [
   { c: categories[0], img: "card_rp", alt: "Exploded blueprint of the chassis: engine, exhaust, suspension, brakes and wheels" },
@@ -50,7 +50,7 @@ const descs: Record<string, string> = {
   path=""
   variant="film"
 >
-  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} loader={site.brand.join(" ")}>
+  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} layout={film.layout} ground={film.ground} loader={site.brand.join(" ")}>
     <section class="band-section hero-section is-active" id="top" data-seg="hero:0,hero:1" data-animation="hero">
       <div class="hero-inner">
         <span class="eyebrow">Windsor's independent parts counter</span>
@@ -210,28 +210,4 @@ const descs: Record<string, string> = {
     </section>
   </main>
 
-  <script>
-    /* Callout layer: mirrors the film card rectangle (same maths as scroll-film.js frameRect, in CSS px)
-       into CSS variables so the SVG labels sit exactly over the square frame. */
-    const band = document.querySelector(".scroll-film .band");
-    const HEADER = 84;
-    function place() {
-      if (!band) return;
-      const W = window.innerWidth, H = window.innerHeight;
-      let x, y, s;
-      if (W > H * 1.05) {
-        const top = HEADER, bottom = Math.max(24, H * 0.04);
-        s = Math.min(H - top - bottom, W * 0.56);
-        x = W - s - W * 0.03; y = top;
-      } else {
-        s = Math.min(W * 0.94, H * 0.38);
-        x = (W - s) / 2; y = H - s - H * 0.03;
-      }
-      band.style.setProperty("--card-x", x + "px");
-      band.style.setProperty("--card-y", y + "px");
-      band.style.setProperty("--card-size", s + "px");
-    }
-    place();
-    window.addEventListener("resize", place);
-  </script>
 </Layout>

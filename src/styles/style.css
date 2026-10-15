@@ -8,9 +8,9 @@
 :root {
   /* Canadian Auto Stores concept: blueprint navy ground, cream ink, logo red as the one accent.
      Token names kept from the template so every component still resolves. */
-  --cream: #0c1727;        /* page ground: blueprint navy (re-sampled from the generated master still) */
-  --paper: #13213a;        /* raised surfaces */
-  --paper-2: #192a46;
+  --cream: #0d1a2c;        /* page ground: the mean navy of the blueprint stills' edges, so the film has no visible frame */
+  --paper: #16263c;        /* raised surfaces */
+  --paper-2: #1c3049;
   --ink: #ece6d6;          /* text: cream ink, the line-work colour */
   --ink-soft: #aab2c0;
   --ink-mute: #76819a;
@@ -814,4 +814,19 @@ a:focus-visible, .btn:focus-visible, button:focus-visible { outline-color: var(-
 @media (max-width: 860px) {
   .callouts { display: none; }
   .stats-ctas { margin-top: 1.2rem; }
+}
+
+/* ——— Full-bleed film layout ——— */
+.scroll-film.layout-bleed ~ * {}
+body.film .band-section .beat-copy, body.film .band-section .hero-inner { width: var(--film-text-col); }
+@media (min-width: 861px) {
+  :root { --film-text-col: clamp(17rem, 26vw, 24rem); }
+  /* keep the copy legible over the wide photo beats: a soft scrim on the left third */
+  .hero-section::before, .stats-section::before { content: none; }
+  .hero-section .hero-inner { position: relative; }
+  .hero-section .hero-inner::before {
+    content: ""; position: absolute; inset: -3rem -6rem -3rem calc(-1 * var(--gutter)); z-index: -1;
+    background: linear-gradient(90deg, rgba(13,26,44,0.78) 0%, rgba(13,26,44,0.55) 60%, rgba(13,26,44,0) 100%);
+  }
+  .hero-heading { font-size: clamp(3rem, 5.6vw, 5.6rem); }
 }

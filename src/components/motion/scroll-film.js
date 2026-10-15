@@ -16,6 +16,7 @@ document.querySelectorAll("[data-scroll-film]").forEach((root) => initScrollFilm
 
 function initScrollFilm(root, cfg) {
   const { radius, headerOffset } = cfg;
+  const bleed = cfg.layout === "bleed";   // film fills the viewport; square frames float on the ground, wide frames cover
   const ground = cfg.ground || getComputedStyle(document.body).backgroundColor;   // the card sits on the page ground
 
   /* ——— Film sources + timeline ———
@@ -70,12 +71,37 @@ function initScrollFilm(root, cfg) {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(window.innerWidth * dpr);
     canvas.height = Math.round(window.innerHeight * dpr);
+    publishSquareRect();
   }
 
   /* Frame placement. The film is square; the page is not. On landscape
      screens the frame is anchored to the right and the text lives on the
      solid ground to its left. On portrait screens it sits in the lower part
      of the viewport under the text. No blur, no feathering: a clean card. */
+  /* Bleed layout: on landscape the frame is fitted to the full viewport height and
+     anchored a little right of centre (text lives in the left margin); images wider
+     than the viewport are cropped, narrower ones sit on the ground. On portrait the
+     image's centre square goes in the usual bottom card. */
+  function bleedRect(iw, ih) {
+    const cw = canvas.width, ch = canvas.height;
+    const landscape = cw > ch * 1.05;
+    if (!landscape) {
+      const size = Math.min(cw * 0.94, ch * 0.38);
+      return { dx: (cw - size) / 2, dy: ch - size - ch * 0.03, dw: size, dh: size, crop: true };
+    }
+    const scale = ch / ih;
+    const w = iw * scale;
+    let dx = cw * 0.56 - w / 2;
+    dx = w >= cw ? Math.min(0, Math.max(cw - w, dx)) : Math.max(0, Math.min(cw - w, dx));
+    return { dx, dy: 0, dw: w, dh: ch, crop: false };
+  }
+  function publishSquareRect() {
+    const r = bleed ? bleedRect(1, 1) : frameRect();
+    const el = root.querySelector(".band") || root;
+    el.style.setProperty("--card-x", r.dx / dpr + "px");
+    el.style.setProperty("--card-y", r.dy / dpr + "px");
+    el.style.setProperty("--card-size", r.dw / dpr + "px");
+  }
   function frameRect() {
     const cw = canvas.width, ch = canvas.height;
     const landscape = cw > ch * 1.05;
@@ -107,6 +133,28 @@ function initScrollFilm(root, cfg) {
     const cw = canvas.width, ch = canvas.height;
     ctx.fillStyle = ground;
     ctx.fillRect(0, 0, cw, ch);
+    if (bleed) {
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const r = bleedRect(iw, ih);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      if (r.crop) {
+        const s = Math.min(iw, ih);
+        ctx.drawImage(img, (iw - s) / 2, (ih - s) / 2, s, s, r.dx, r.dy, r.dw, r.dh);
+      } else {
+        ctx.drawImage(img, r.dx, r.dy, r.dw, r.dh);
+        if (r.dw < cw) {
+          // square frame on a wide screen: feather its sides into the ground so the edge never reads
+          const f = r.dw * 0.05;
+          for (const [x0, x1] of [[r.dx, r.dx + f], [r.dx + r.dw, r.dx + r.dw - f]]) {
+            const g = ctx.createLinearGradient(x0, 0, x1, 0);
+            g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
+          }
+        }
+      }
+      return;
+    }
     const { dx, dy, dw, dh } = frameRect();
     ctx.save();
     roundedPath(dx, dy, dw, dh, radius * dpr);
