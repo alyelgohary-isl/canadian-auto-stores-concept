@@ -1,0 +1,237 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ScrollFilm from "@/components/motion/ScrollFilm.astro";
+import { site } from "@/site.config";
+import { url } from "@/lib/url";
+import * as film from "@/data/film";
+import { categories } from "@/data/categories";
+
+/* Callouts: HTML/SVG labels over the film card, in fractions of the square frame (0..1).
+   a = anchor on the part, l = label position, side = which way the text runs from the label point. */
+type Callout = { a: [number, number]; l: [number, number]; text: string; side?: "start" | "end"; accent?: boolean };
+const exploded: Callout[] = [
+  { a: [0.36, 0.62], l: [0.10, 0.70], text: "Engine parts", side: "start" },
+  { a: [0.28, 0.585], l: [0.10, 0.52], text: "Steering & suspension", side: "start" },
+  { a: [0.22, 0.46], l: [0.06, 0.36], text: "Wipers, fuses & lighting", side: "start" },
+  { a: [0.75, 0.52], l: [0.86, 0.44], text: "Exhaust", side: "start" },
+  { a: [0.735, 0.59], l: [0.92, 0.66], text: "Belts, hoses & cooling", side: "end" },
+  { a: [0.51, 0.725], l: [0.62, 0.86], text: "Brakes & wheel bearings", side: "start" },
+];
+const oil: Callout[] = [
+  { a: [0.39, 0.74], l: [0.52, 0.78], text: "Oil filter", side: "start", accent: true },
+  { a: [0.36, 0.77], l: [0.52, 0.85], text: "Drain plug", side: "start", accent: true },
+  { a: [0.343, 0.80], l: [0.18, 0.90], text: "Motor oil", side: "end" },
+];
+const cabin: Callout[] = [
+  { a: [0.47, 0.17], l: [0.26, 0.10], text: "Seat vinyl & foam", side: "end", accent: true },
+  { a: [0.60, 0.12], l: [0.76, 0.06], text: "Headliner", side: "start", accent: true },
+];
+const cards = [
+  { c: categories[0], img: "card_rp", alt: "Exploded blueprint of the chassis: engine, exhaust, suspension, brakes and wheels" },
+  { c: categories[1], img: "card_oil", alt: "Blueprint engine with the oil filter and drain plug in red and one amber stream of oil" },
+  { c: categories[2], img: "card_chem", alt: "A sedan under a single shop lamp, bodywork freshly waxed" },
+  { c: categories[3], img: "card_perf", alt: "Blueprint chassis with the intake and exhaust drawn in red" },
+  { c: categories[4], img: "card_tools", alt: "Blueprint drawing of a socket set fanned open" },
+  { c: categories[5], img: "card_uph", alt: "Blueprint body shell with the seats lifted out and filled red" },
+];
+const codes: Record<string, string> = { rp: "01", oil: "02", chem: "03", perf: "04", tools: "05", uph: "06" };
+const descs: Record<string, string> = {
+  rp: "Brakes, suspension, electrical, cooling, exhaust, ignition and more.",
+  oil: "Synthetic, blend and conventional oils, with oil, air, cabin and fuel filters.",
+  chem: "Antifreeze, brake fluid, gasket makers, cleaners, waxes and polish.",
+  perf: "HID and LED lighting, organizers, chargers, mats and covers.",
+  tools: "Hand and air tools, battery chargers, gloves, cleaners, paint.",
+  uph: "Vinyl, headliner, foam, auto carpet, hardware. Auto, marine, home.",
+};
+---
+<Layout
+  title="Auto Parts in Windsor since 1938 | Canadian Auto Stores"
+  description="Independent, family-owned auto parts store at 780 Ottawa St, Windsor. Replacement parts, oils, chemicals, tools and upholstery for garages and DIYers. Free delivery to Windsor, Tecumseh and LaSalle."
+  path=""
+  variant="film"
+>
+  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} loader={site.brand.join(" ")}>
+    <section class="band-section hero-section is-active" id="top" data-seg="hero:0,hero:1" data-animation="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">Windsor's independent parts counter</span>
+        <h1 class="hero-heading">
+          <span class="line"><span class="word">Every</span> <span class="word">part.</span></span>
+          <span class="line"><span class="word">Since</span> <span class="word">1938.</span></span>
+        </h1>
+        <p class="hero-tagline">Replacement parts, oils, chemicals, tools and upholstery for garages and do-it-yourselfers, from one family-owned counter in Windsor.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-solid" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a>
+          <a class="btn btn-ghost" href={url("garages/#account")}>Open a garage account</a>
+        </div>
+        <div class="badge-strip"><span>Family-owned since 1938</span><span>Free delivery: Windsor · Tecumseh · LaSalle</span><span>Open 7 days</span></div><!-- CONFIRM: hours -->
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="draw:0.12,explode:0.2" data-animation="slide-left">
+      <div class="beat-copy">
+        <span class="beat-index">01 · Any make, any model</span>
+        <h2 class="beat-heading">We know what's under every make.</h2>
+        <p class="beat-body">Import or domestic, a 1990s pickup or this year's sedan. Give the counter a year, make and model and we'll find the part.</p>
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="explode:0.3,oilf:0.12" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index">02 · Replacement Parts</span>
+        <h2 class="beat-heading">If it bolts on, we stock it.</h2>
+        <p class="beat-body">Brakes, suspension, electrical, exhaust, cooling, ignition. Replacement parts for every make, at counter prices.</p>
+      </div>
+    </section>
+    {/* Category callouts on the exploded hold: thin leader lines, mono labels, over the film card */}
+    <section class="band-section callout-section" data-seg="explode:0.88,oilf:0.15" aria-hidden="true">
+      <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        {exploded.map((k) => (
+          <g class="lbl">
+            <line x1={k.a[0] * 1000} y1={k.a[1] * 1000} x2={k.l[0] * 1000} y2={k.l[1] * 1000} />
+            <circle cx={k.a[0] * 1000} cy={k.a[1] * 1000} r="4" class="accent" />
+            <text x={k.l[0] * 1000} y={k.l[1] * 1000 - 8} text-anchor={k.side ?? "start"}>{k.text}</text>
+          </g>
+        ))}
+      </svg></div>
+    </section>
+
+    <section class="band-section interlude" data-seg="oilf:0.45,oilr:0.55" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index beat-eyebrow">Motor Oils &amp; Filtration</span>
+        <h2 class="beat-heading">The right oil. The right filter.</h2>
+        <p class="beat-body">Synthetic, blend or conventional, with the filter to match. Not sure which? Ask the counter.</p>
+      </div>
+    </section>
+    <section class="band-section callout-section" data-seg="oilf:0.92,oilr:0.25" aria-hidden="true">
+      <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        {oil.map((k) => (
+          <g class="lbl">
+            <line x1={k.a[0] * 1000} y1={k.a[1] * 1000} x2={k.l[0] * 1000} y2={k.l[1] * 1000} class={k.accent ? "accent" : undefined} />
+            <circle cx={k.a[0] * 1000} cy={k.a[1] * 1000} r="4" class={k.accent ? "accent" : undefined} />
+            <text x={k.l[0] * 1000} y={k.l[1] * 1000 - 8} text-anchor={k.side ?? "start"} class={k.accent ? "accent" : undefined}>{k.text}</text>
+          </g>
+        ))}
+      </svg></div>
+    </section>
+
+    <section class="band-section interlude" data-seg="cabf:0.45,cabr:0.55" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index beat-eyebrow">Upholstery &amp; Carpet</span>
+        <h2 class="beat-heading">The parts store with a fabric counter.</h2>
+        <p class="beat-body">Vinyl, headliner, foam and auto carpet by the yard, for cars, boats, booths and basements.</p>
+      </div>
+    </section>
+    <section class="band-section callout-section" data-seg="cabf:0.92,cabr:0.25" aria-hidden="true">
+      <div class="callouts"><svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        {cabin.map((k) => (
+          <g class="lbl">
+            <line x1={k.a[0] * 1000} y1={k.a[1] * 1000} x2={k.l[0] * 1000} y2={k.l[1] * 1000} class={k.accent ? "accent" : undefined} />
+            <circle cx={k.a[0] * 1000} cy={k.a[1] * 1000} r="4" class={k.accent ? "accent" : undefined} />
+            <text x={k.l[0] * 1000} y={k.l[1] * 1000 - 8} text-anchor={k.side ?? "start"} class={k.accent ? "accent" : undefined}>{k.text}</text>
+          </g>
+        ))}
+      </svg></div>
+    </section>
+
+    <section class="band-section" data-seg="rebuild:0.55,wax:1" data-animation="slide-left">
+      <div class="beat-copy">
+        <span class="beat-index">03 · Chemicals, Waxes &amp; Lubricants</span>
+        <h2 class="beat-heading">Put it back better than you found it.</h2>
+        <p class="beat-body">Fluids, gasket makers, cleaners, waxes and polish from the brands the trade trusts.</p>
+      </div>
+    </section>
+
+    <section class="band-section stats-section" data-seg="pullout:0.2,end:1" data-animation="stagger-up">
+      <div class="stats-hero">
+        <span class="stats-figure"><span class="stat-number" data-value="1938" data-static>1938</span></span>
+        <span class="stats-caption">Family-owned in Windsor since</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><span class="stat-number" data-value="3" data-decimals="0">0</span><span class="stat-suffix"></span><span class="stat-label">Free delivery: Windsor · Tecumseh · LaSalle</span></div>
+        <div class="stat"><span class="stat-number" data-value="7" data-decimals="0">0</span><span class="stat-suffix"></span><span class="stat-label">Days a week</span></div><!-- CONFIRM: hours incl. Sunday -->
+        <div class="stat"><span class="stat-number" data-value="6" data-decimals="0">0</span><span class="stat-suffix"></span><span class="stat-label">Categories, one counter</span></div>
+      </div>
+      <div class="hero-ctas stats-ctas">
+        <a class="btn btn-light" href={url("garages/#account")}>Open a garage account</a>
+        <a class="btn btn-ghost" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a>
+      </div>
+    </section>
+  </ScrollFilm>
+
+  <main class="page-flow">
+    <span class="flow-anchor" id="flow"></span>
+
+    <section class="section" id="about">
+      <div class="wrap statement">
+        <h2 class="reveal">Old-fashioned family service. A very modern inventory.</h2>
+        <div class="reveal">
+          <p>Canadian Auto Stores has been an independent, family-owned parts retailer in Windsor since 1938. The counter staff are the reason people come back: they know the catalogue, they know the cars, and you'll never wait long for service.</p>
+          <p>Garages order by the case; do-it-yourselfers come in with the old part in a bag. Both get the same answer: we have it, or we'll get it.</p>
+          <p class="accent">{site.tagline}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section no-top" id="find">
+      <div class="wrap">
+        <div class="split-head">
+          <div class="section-head reveal">
+            <span class="eyebrow">Find your part</span>
+            <h2>Six categories. One counter.</h2>
+            <p>What's covered, the brands carried, and a part request form on every page.</p>
+          </div>
+          <a class="btn btn-ghost reveal" href={url("garages/")}>For garages</a>
+        </div>
+        <div class="card-grid cols-3">
+          {cards.map(({ c, img, alt }) => (
+            <a class="community-card reveal" href={url(`parts/${c.slug}/`)}>
+              <div class="card-media blueprint"><img src={url(`assets/img/${img}.webp`)} alt={alt} loading="lazy" width="960" height="600" /><span class="cat-code">{codes[c.key]}</span></div>
+              <div class="card-body">
+                <h3>{c.name}</h3>
+                <p class="card-desc">{descs[c.key]}</p>
+                <p class="card-meta">{c.cardMeta}</p>
+                <span class="link-arrow">See what's covered</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section pine final-cta" id="order">
+      <div class="wrap reveal">
+        <h2>Two ways to order.</h2>
+        <p>Garages get an account, delivery and a counter that picks up on the first ring. Everyone else can order online or walk in. {site.address.street}, free parking.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-light btn-lg" href={url("garages/#account")}>Open a garage account</a>
+          <a class="btn btn-ghost btn-lg" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* Callout layer: mirrors the film card rectangle (same maths as scroll-film.js frameRect, in CSS px)
+       into CSS variables so the SVG labels sit exactly over the square frame. */
+    const band = document.querySelector(".scroll-film .band");
+    const HEADER = 84;
+    function place() {
+      if (!band) return;
+      const W = window.innerWidth, H = window.innerHeight;
+      let x, y, s;
+      if (W > H * 1.05) {
+        const top = HEADER, bottom = Math.max(24, H * 0.04);
+        s = Math.min(H - top - bottom, W * 0.56);
+        x = W - s - W * 0.03; y = top;
+      } else {
+        s = Math.min(W * 0.94, H * 0.38);
+        x = (W - s) / 2; y = H - s - H * 0.03;
+      }
+      band.style.setProperty("--card-x", x + "px");
+      band.style.setProperty("--card-y", y + "px");
+      band.style.setProperty("--card-size", s + "px");
+    }
+    place();
+    window.addEventListener("resize", place);
+  </script>
+</Layout>

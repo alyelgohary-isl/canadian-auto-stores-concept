@@ -1,0 +1,130 @@
+---
+/* One product category page: hero (plain / scrub / loop), what's covered as spec lists,
+   brands as text, delivery, ask the counter, part request form. */
+import Layout from "@/layouts/Layout.astro";
+import HeroLoop from "@/components/motion/HeroLoop.astro";
+import ScrollScrub from "@/components/motion/ScrollScrub.astro";
+import PartRequestForm from "@/components/PartRequestForm.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+import { categories, type Category } from "@/data/categories";
+
+interface Props { category: Category }
+const { category: c } = Astro.props;
+const path = `parts/${c.slug}/`;
+const others = categories.filter((o) => o.slug !== c.slug);
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Parts", item: absolute("#find") },
+    { "@type": "ListItem", position: 3, name: c.name, item: absolute(path) },
+  ] },
+];
+---
+<Layout title={c.title} description={c.meta} path={path} current="parts" schema={schema}>
+<main class="page">
+  {c.hero === "scrub" && (
+    <div class="scrub-runway" id="perf-runway">
+      <section class="page-hero has-media sticky-hero">
+        <div class="wrap">
+          <div>
+            <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span><a href={url("#find")}>Parts</a><span>/</span>{c.name}</nav>
+            <span class="eyebrow">Find your part</span>
+            <h1>{c.h1}</h1>
+            <p class="lede">{c.lede}</p>
+            <div class="hero-ctas"><a class="btn btn-solid" href="#request">Request a part</a><a class="btn btn-ghost" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a></div>
+          </div>
+          <div class="hero-media seasons-card reveal">
+            <ScrollScrub frames="frames/perf/pf_" count={61} poster="assets/img/perf_poster.webp" runway="#perf-runway"
+                         timeline="0:0,0.1:0,0.9:60,1:60" role="img" aria-label="Blueprint drawing of a sedan; the intake and exhaust group fills in red as you scroll" />
+            <ol class="season-tabs" aria-hidden="true"><li data-at="0">Stock</li><li data-at="0.5">Intake</li><li data-at="0.85">Exhaust</li></ol>
+            <p class="season-caption">Scroll: the intake and exhaust light up.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  )}
+  {c.hero === "loop" && (
+    <section class="page-hero has-loop">
+      <HeroLoop name="sockets" />
+      <div class="wrap">
+        <div>
+          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span><a href={url("#find")}>Parts</a><span>/</span>{c.name}</nav>
+          <span class="eyebrow">Find your part</span>
+          <h1>{c.h1}</h1>
+          <p class="lede">{c.lede}</p>
+          <div class="hero-ctas"><a class="btn btn-solid" href="#request">Request a part</a><a class="btn btn-ghost" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a></div>
+        </div>
+      </div>
+    </section>
+  )}
+  {c.hero === "plain" && (
+    <section class="page-hero">
+      <div class="wrap">
+        <div>
+          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span><a href={url("#find")}>Parts</a><span>/</span>{c.name}</nav>
+          <span class="eyebrow">Find your part</span>
+          <h1>{c.h1}</h1>
+          <p class="lede">{c.lede}</p>
+          <div class="hero-ctas"><a class="btn btn-solid" href="#request">Request a part</a><a class="btn btn-ghost" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" id="covered">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">What's covered</span>
+        <h2>{c.name}</h2>
+        <p>Lines as listed at the counter. If it isn't here, ask: we can usually source it.</p>
+      </div>
+      <div class="group-grid">
+        {c.groups.map((g, i) => (
+          <div class="group reveal">
+            <span class="mono-note">{String(i + 1).padStart(2, "0")}</span>
+            <h3>{g.title}</h3>
+            <ul class="spec-ul">{g.items.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper no-top-pad" id="brands">
+    <div class="wrap counter-grid">
+      <div class="reveal">
+        <span class="eyebrow">Brands carried</span>
+        <div class="chips">{c.brands.map((b) => <span class="chip">{b}</span>)}</div>
+        <p class="micro" style="margin-top:0.9rem">Brand names are listed as carried at the counter; availability varies by line.</p><!-- CONFIRM: brand-to-category mapping -->
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">Delivery</span>
+        <dl class="terms compact" style="margin-top:0.8rem">
+          <div><dt>Free delivery</dt><dd>{site.delivery.areas.join(" · ")}</dd></div>
+          <div><dt>Minimum order</dt><dd>{site.delivery.minimum}</dd></div><!-- CONFIRM: $75 vs $50 -->
+          <div><dt>Further afield</dt><dd>Shipped FOB Windsor</dd></div>
+        </dl>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">Ask the counter</span>
+        <dl class="terms compact" style="margin-top:0.8rem">
+          <div><dt>Phone</dt><dd><a href={`tel:${site.phone}`}>{site.phone}</a></dd></div>
+          {site.hours.map((h) => <div><dt>{h.days}</dt><dd>{h.time}</dd></div>)}
+        </dl><!-- CONFIRM: hours -->
+      </div>
+    </div>
+  </section>
+
+  <PartRequestForm form={`part-request-${c.key}`} />
+
+  <section class="section" id="more">
+    <div class="wrap">
+      <div class="split-head"><div class="section-head reveal"><span class="eyebrow">Also at the counter</span><h2>Other categories</h2></div></div>
+      <ul class="cat-strip reveal">
+        {others.map((o) => <li><a href={url(`parts/${o.slug}/`)}>{o.name}<span class="link-arrow"></span></a></li>)}
+      </ul>
+    </div>
+  </section>
+</main>
+</Layout>

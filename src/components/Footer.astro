@@ -1,0 +1,45 @@
+---
+import { site } from "../site.config";
+import { url } from "../lib/url";
+
+const [first, second] = site.brand;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href={url()}>{first}<em>{second}</em></a>
+        <p>{site.description}</p>
+        <p class="tagline">{site.tagline}</p>
+      </div>
+      {site.footer.columns.map((col) => (
+        <div class="footer-col">
+          <h3>{col.title}</h3>
+          <ul>
+            {col.links.map((link) => <li><a href={url(link.href)} {...(/^https?:/.test(link.href) ? { target: "_blank", rel: "noopener" } : {})}>{link.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+      <div class="footer-col footer-hours">
+        <h3>Store hours</h3>
+        <dl class="hours">{site.hours.map((h) => <div><dt>{h.days}</dt><dd>{h.time}</dd></div>)}</dl><!-- CONFIRM: hours -->
+        <p class="footer-address"><a href={site.mapUrl} target="_blank" rel="noopener">{site.address.street}, {site.address.city}, {site.address.region} {site.address.postal}</a><br /><a href={`tel:${site.phone}`}>{site.phone}</a></p>
+      </div>
+      <div class="footer-col footer-news">
+        <h3>Be first to know</h3>
+        <p>{site.footer.newsletter}</p>
+        <form class="news-form" novalidate="false">
+          <label class="visually-hidden" for="news-email">Email</label>
+          <input id="news-email" type="email" name="email" placeholder="Email address" required />
+          <button class="btn btn-solid btn-sm" type="submit">Subscribe</button>
+        </form>
+        <div class="form-success" style="margin-top:0.8rem;padding:0.9rem 1rem"><p>You're on the list.</p></div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <p>&copy; {year} {site.legalName} {site.footer.legal}</p>
+      <p class="concept-line">{site.footer.concept}</p>
+    </div>
+  </div>
+</footer>

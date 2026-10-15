@@ -1,0 +1,75 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import HeroLoop from "@/components/motion/HeroLoop.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const reasons = [
+  { value: "Order", title: "Order or availability", body: "Price and stock on a part, or help with an online order.", link: "Ask the counter" },
+  { value: "Trade account", title: "Garages & trade", body: "Accounts, wholesale pricing, delivery runs.", link: "Talk to us" },
+  { value: "Upholstery", title: "Upholstery & carpet", body: "Vinyl, headliner, foam and carpet by the yard.", link: "Ask about materials" },
+  { value: "General", title: "General", body: "Everything else.", link: "Say hello" },
+];
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Contact", item: absolute("contact/") },
+  ] },
+];
+---
+<Layout title="Contact Canadian Auto Stores | 780 Ottawa St, Windsor" description="Canadian Auto Stores, 780 Ottawa St, Windsor ON. Call 519-977-9000, email info@canautostores.com, or come in: free parking, open seven days." path="contact/" current="contact" schema={schema}>
+<main class="page">
+  <section class="page-hero has-loop">
+    <HeroLoop name="contact" />
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Contact</nav>
+        <span class="eyebrow">{site.address.street}, {site.address.city}</span>
+        <h1>Come see us.</h1>
+        <p class="lede">Call the counter, send a message, or come in. Free parking out front. Wholesale or retail, everything you need for auto work is here.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href={`tel:${site.phone}`}>Call {site.phone}</a><a class="btn btn-ghost" href={site.mapUrl} target="_blank" rel="noopener">Open in Maps</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="route-cards cols-4">
+        {reasons.map((r) => (
+          <button class="route-card reveal" type="button" data-reason={r.value}><h3>{r.title}</h3><p>{r.body}</p><span class="link-arrow">{r.link}</span></button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper" id="form">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">The counter</span>
+        <h2 class="h2" style="margin-top:0.8rem">Hours and details</h2>
+        <dl class="contact-details" style="margin-top:2rem">
+          <div><dt>Address</dt><dd><a href={site.mapUrl} target="_blank" rel="noopener">{site.address.street}, {site.address.city}, {site.address.region} {site.address.postal}</a></dd></div>
+          <div><dt>Phone</dt><dd><a href={`tel:${site.phone}`}>{site.phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          <div><dt>Hours</dt><dd><dl class="hours">{site.hours.map((h) => <div><dt>{h.days}</dt><dd>{h.time}</dd></div>)}</dl></dd></div><!-- CONFIRM: hours, incl. Sunday -->
+          <div><dt>Delivery</dt><dd>Free in {site.delivery.areas.join(", ")} on orders over {site.delivery.minimum}. Shipping FOB Windsor.</dd></div><!-- CONFIRM: minimum -->
+          <div><dt>Payment</dt><dd>Visa, Mastercard, American Express, Interac, cash</dd></div>
+          <div><dt>Online catalogue</dt><dd><a href={site.orderUrl} target="_blank" rel="noopener">ePartConnection account login</a></dd></div><!-- CONFIRM: public link -->
+        </dl>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="contact">
+          <div class="row"><div class="field"><label for="name">Name*</label><input id="name" name="name" type="text" required /></div><div class="field"><label for="phone">Phone*</label><input id="phone" name="phone" type="tel" required /></div></div>
+          <div class="field"><label for="email">Email*</label><input id="email" name="email" type="email" required /></div>
+          <div class="field"><label for="reason">I'm reaching out about*</label><select id="reason" name="reason" required><option value="" disabled selected>Select…</option>{reasons.map((r) => <option value={r.value}>{r.title}</option>)}</select></div>
+          <div class="field"><label for="message">Message*</label><textarea id="message" name="message" required placeholder="Year, make, model and the part, or anything else"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>Canadian Auto Stores may contact me about this message.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Send message</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thanks.</h3><p>We provide prompt responses to all customer emails. The counter will be in touch during store hours.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

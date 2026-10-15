@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Garages & trade", item: absolute("garages/") },
+  ] },
+];
+---
+<Layout title="Trade Accounts for Garages | Canadian Auto Stores Windsor" description="Wholesale auto parts for garages in Windsor, Tecumseh and LaSalle: a counter that knows the catalogue, free local delivery, online ordering and trade accounts." path="garages/" current="garages" schema={schema}>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Garages &amp; trade</nav>
+        <span class="eyebrow">For the trade</span>
+        <h1>Built for the trade.</h1>
+        <p class="lede">Wholesale pricing, a counter that knows the catalogue, and free delivery to Windsor, Tecumseh and LaSalle. Open a garage account or order online through our catalogue.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href="#account">Open a garage account</a><a class="btn btn-ghost" href={site.orderUrl} target="_blank" rel="noopener">Order parts</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="feature-grid">
+        <div class="feature reveal"><span class="idx">01</span><h3>Counter expertise</h3><p>Knowledgeable, experienced counter staff who pick up on the first ring and know the catalogue. Give them a year, make and model; get a part number and a price.</p></div>
+        <div class="feature reveal"><span class="idx">02</span><h3>Delivery</h3><p>Free delivery in Windsor, Tecumseh and LaSalle on orders over {site.delivery.minimum}. Further afield, shipped FOB Windsor.</p></div><!-- CONFIRM: minimum ($75 vs $50), delivery runs and cut-off times -->
+        <div class="feature reveal"><span class="idx">03</span><h3>Accounts and online ordering</h3><p>Trade accounts with wholesale pricing. Skip the call, skip the trip: order from the ePartConnection catalogue and we'll pick, pack and deliver.</p></div><!-- CONFIRM: account terms -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper">
+    <div class="wrap">
+      <div class="section-head reveal"><span class="eyebrow">Stocked for the bay</span><h2>What the trade orders most.</h2><p>Six categories, one counter. Replacement parts by the case; oils and chemicals by the jug; shop supplies by the box.</p></div>
+      <ul class="cat-strip reveal">
+        <li><a href={url("parts/replacement-parts/")}>Replacement Parts<span class="link-arrow"></span></a></li>
+        <li><a href={url("parts/motor-oils-filtration/")}>Motor Oils &amp; Filtration<span class="link-arrow"></span></a></li>
+        <li><a href={url("parts/chemicals-waxes-lubricants/")}>Chemicals, Waxes &amp; Lubricants<span class="link-arrow"></span></a></li>
+        <li><a href={url("parts/tools-shop-supplies/")}>Tools &amp; Shop Supplies<span class="link-arrow"></span></a></li>
+        <li><a href={url("parts/performance-accessories/")}>Performance &amp; Accessories<span class="link-arrow"></span></a></li>
+        <li><a href={url("parts/upholstery-carpet/")}>Upholstery &amp; Carpet<span class="link-arrow"></span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="account">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Trade account</span>
+        <h2 class="h2" style="margin-top:0.8rem">Open a garage account</h2>
+        <p class="ink-soft" style="margin-top:1rem;font-size:1.08rem">Tell us about the shop. The counter will call back to set up pricing, delivery and catalogue access.</p>
+        <p class="mono-note" style="margin-top:1.4rem">Or call {site.phone}</p>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="trade-account" data-form-type="trade-account">
+          <div class="field"><label for="business">Business name*</label><input id="business" name="business" required /></div>
+          <div class="row">
+            <div class="field"><label for="contact">Contact name*</label><input id="contact" name="contact" required /></div>
+            <div class="field"><label for="phone">Phone*</label><input id="phone" type="tel" name="phone" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="email">Email*</label><input id="email" type="email" name="email" required /></div>
+            <div class="field"><label for="shop_type">Shop type*</label><select id="shop_type" name="shop_type" required><option value="" disabled selected>Select…</option><option>Independent garage</option><option>Dealership</option><option>Body shop</option><option>Fleet</option><option>Detailer</option><option>Upholstery shop</option><option>Other</option></select></div>
+          </div>
+          <div class="field"><label for="address">Shop address</label><input id="address" name="address" placeholder="Street, city" /></div>
+          <div class="field"><label for="message">What do you order most?</label><textarea id="message" name="message" placeholder="Brakes and suspension, oils by the case, shop supplies…"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>Canadian Auto Stores may contact me about a trade account.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Send account enquiry</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thanks.</h3><p>The counter will call you back during store hours to set up the account.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

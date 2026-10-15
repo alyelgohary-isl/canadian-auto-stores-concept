@@ -1,0 +1,37 @@
+---
+/* Part request: year / make / model / part, plus how to reach the customer.
+   Posts through src/scripts/site.js; in this concept no endpoint is configured. */
+interface Props { form?: string; heading?: string; blurb?: string; part?: string }
+const { form = "part-request", heading = "Request a part", blurb = "Give the counter the year, make and model. We'll check the shelf and call you back with price and availability.", part = "" } = Astro.props;
+const year = new Date().getFullYear() + 1;
+---
+<section class="section paper" id="request">
+  <div class="wrap form-layout">
+    <div class="sticky reveal">
+      <span class="eyebrow">Ask the counter</span>
+      <h2 class="h2" style="margin-top:0.8rem">{heading}</h2>
+      <p class="ink-soft" style="margin-top:1rem;font-size:1.08rem">{blurb}</p>
+      <p class="mono-note" style="margin-top:1.4rem">Or call 519-977-9000</p>
+    </div>
+    <div>
+      <form class="form reveal" method="post" data-form={form} data-form-type="part-request">
+        <div class="row row-3">
+          <div class="field"><label for="year">Year*</label><input id="year" name="year" inputmode="numeric" pattern="[0-9]{4}" placeholder="2014" min="1900" max={year} required /></div>
+          <div class="field"><label for="make">Make*</label><input id="make" name="make" placeholder="Make" required /></div>
+          <div class="field"><label for="model">Model*</label><input id="model" name="model" placeholder="Model" required /></div>
+        </div>
+        <div class="field"><label for="part">Part*</label><input id="part" name="part" placeholder="e.g. front brake pads and rotors" value={part} required /></div>
+        <div class="row">
+          <div class="field"><label for="name">Name*</label><input id="name" name="name" required /></div>
+          <div class="field"><label for="phone">Phone*</label><input id="phone" type="tel" name="phone" required /></div>
+        </div>
+        <div class="field"><label for="email">Email</label><input id="email" type="email" name="email" /></div>
+        <div class="field"><label for="notes">Anything else</label><textarea id="notes" name="notes" placeholder="Engine size, trim, VIN, or when you need it by"></textarea></div>
+        <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>Canadian Auto Stores may contact me about this request.</span></label>
+        <button class="btn btn-solid btn-lg" type="submit">Send part request</button>
+        <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+      </form>
+      <div class="form-success"><h3>Got it.</h3><p>The counter will call you back with price and availability during store hours.</p></div>
+    </div>
+  </div>
+</section>

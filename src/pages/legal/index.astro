@@ -1,0 +1,24 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site } from "@/site.config";
+import { url } from "@/lib/url";
+---
+<Layout title={`Legal | ${site.name}`} description={`Legal notices for this ${site.name} website concept.`} path="legal/">
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap"><div><nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Legal</nav><h1>Legal</h1></div></div>
+  </section>
+  <section class="section no-top">
+    <div class="wrap-narrow prose">
+      <h2>About this website</h2>
+      <p>This is a speculative design concept prepared by Islands. It has not been commissioned, reviewed or approved by {site.legalName}, and it is not the company's website. Facts shown here were taken from the company's public website on 15 October 2026 and may be out of date; the vehicle drawings are generic illustrations and do not depict any product sold by the company. The page is marked <code>noindex</code> and forms do not send anything.</p>
+      <h2>Website terms</h2>
+      <p><!-- CONFIRM: legal copy from the client -->Terms to be supplied by the client's counsel.</p>
+      <h2>Privacy and communications</h2>
+      <p>On a live site: by submitting a form and checking the consent box, you agree to be contacted by {site.name} about your enquiry. You can withdraw consent at any time by writing to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <h2>Trademarks</h2>
+      <p>Brand names mentioned on this site are the property of their respective owners and are listed only to describe products carried at the counter.</p>
+    </div>
+  </section>
+</main>
+</Layout>

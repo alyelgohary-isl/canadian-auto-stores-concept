@@ -1,0 +1,96 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "About", item: absolute("about/") },
+  ] },
+];
+---
+<Layout title="About Canadian Auto Stores | Family-owned in Windsor since 1938" description="Canadian Auto Stores is an independent, family-owned auto parts retailer at 780 Ottawa St, Windsor, in business since 1938. Old-fashioned family service, a counter that knows the catalogue." path="about/" current="about" schema={schema}>
+<main class="page">
+  <section class="page-hero has-media">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>About</nav>
+        <span class="eyebrow">Independent · family-owned · Windsor</span>
+        <h1>Family principles since 1938.</h1>
+        <p class="lede">Canadian Auto Stores is a family-owned, independent auto parts retailer that has been in business in Windsor since 1938. Part of the community, serving customers in Ontario and beyond.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href={url("contact/")}>Come see us</a><a class="btn btn-ghost" href={url("garages/")}>For garages</a></div>
+      </div>
+      <div class="hero-media reveal">
+        <img src={url("assets/img/about_hero.webp")} alt="Blueprint drawing of a generic sedan on a navy ground, cream line work" loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap statement">
+      <h2 class="reveal">You'll never wait for service.</h2>
+      <div class="reveal">
+        <p>Most of all, Canadian Auto Stores is known for its customer service. The counter staff are knowledgeable and experienced, and the point is to make every visit fast and efficient: the right part, the first time, without a long wait.</p>
+        <p>Stop by and check out the old-fashioned family service and the extensive inventory. We're eager to make a customer of you.</p>
+        <p class="accent">{site.tagline}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper">
+    <div class="wrap">
+      <div class="feature-grid">
+        <div class="feature reveal"><span class="idx">01</span><h3>Wholesale or retail</h3><p>Garages order by the case; do-it-yourselfers come in with the old part in a bag. Same counter, same answer: we have it, or we'll get it.</p></div>
+        <div class="feature reveal"><span class="idx">02</span><h3>Every make</h3><p>Import and domestic, classic restorations and this year's models. Replacement parts, oils, chemicals, tools, accessories, and upholstery and carpet by the yard.</p></div>
+        <div class="feature reveal"><span class="idx">03</span><h3>Free local delivery</h3><p>Windsor, Tecumseh and LaSalle, on qualifying orders. Further out, we ship FOB Windsor. Or come in: free parking at 780 Ottawa St.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal"><span class="eyebrow">Eighty-eight years</span><h2>Since 1938.</h2></div><!-- CONFIRM: "nearly 80 years" on the current site vs 1938 = 88 years -->
+      <ol class="timeline">
+        <li class="done reveal"><span class="tl-status">1938</span><h3>Opened in Windsor</h3><p>Independent and family-owned from the first day.</p></li>
+        <li class="done reveal"><span class="tl-status">Since</span><h3>Parts, service, value</h3><p>Trusted manufacturers, counter prices, fast service.</p></li><!-- CONFIRM: any milestones (moves, generations, expansions) -->
+        <li class="done reveal"><span class="tl-status">Today</span><h3>780 Ottawa St</h3><p>Garages and do-it-yourselfers, online ordering, free local delivery.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section paper">
+    <div class="wrap trust">
+      <div class="reveal">
+        <span class="eyebrow">Affiliations and awards</span>
+        <h2>Known around town.</h2>
+        <p>Professional affiliations and awards as listed on the current site. Dates and issuing bodies to be confirmed before any of this goes live.</p>
+        <!-- CONFIRM: Chamber of Commerce and BBB membership current; award names, years and issuers -->
+      </div>
+      <div class="badges reveal">
+        <span class="badge">Chamber of Commerce</span>
+        <span class="badge">Better Business Bureau</span>
+        <span class="badge">Best Auto Store 2010</span>
+        <span class="badge">Awesome Auto Part Outlet Award</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <blockquote class="quote reveal">
+        <p>“All the parts your car needs are here. The staff are great, and the parts are very well priced.”</p>
+        <cite>Austin A., Google review</cite><!-- CONFIRM: permission to quote -->
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section pine final-cta">
+    <div class="wrap reveal">
+      <h2>Check us out.</h2>
+      <p>{site.address.street}, {site.address.city}. Free parking. Open seven days.</p><!-- CONFIRM: hours -->
+      <div class="hero-ctas"><a class="btn btn-light btn-lg" href={site.mapUrl} target="_blank" rel="noopener">Get directions</a><a class="btn btn-ghost btn-lg" href={url("contact/")}>Hours and contact</a></div>
+    </div>
+  </section>
+</main>
+</Layout>
